@@ -1,1 +1,63 @@
-PinShelf - Your Personal Bookmark ManagerA beautiful, modern, and responsive bookmark manager designed to work like a native app. PinShelf allows you to save, organize, and quickly access your favorite websites with a clean, intuitive interface. It's built as a Progressive Web App (PWA), so you can add it to your home screen for an app-like experience.✨ Key FeaturesModern & Responsive Design: A sleek dark-mode interface that looks great on any device, from mobile phones to desktops.Pin Important Sites: Keep your most-used websites at the top of your list for quick and easy access.Progressive Web App (PWA): Install PinShelf on your mobile or desktop home screen for a seamless, native-app feel. It works offline, too!Native Sharing: Use the built-in Web Share API on mobile to share links directly to other apps or contacts. It falls back to "copy to clipboard" on desktop.Automatic Favicons: Automatically fetches and displays website favicons for easy visual identification.Client-Side Storage: All your bookmarks are stored securely in your browser's localStorage. No accounts, no servers, no fuss.Zero Dependencies: Built with vanilla HTML, JavaScript, and Tailwind CSS for a lightweight and fast experience.Professional Loading Animation: A smooth loading screen provides a polished user experience on startup.🚀 Getting StartedSince PinShelf is a self-contained web application, getting started is incredibly simple.Clone or Download: Get a copy of the project files.Place the Favicon: Make sure the pinshelf.png favicon file is in the same directory as index.html.Open in Browser: Open the index.html file in any modern web browser like Google Chrome, Firefox, or Safari.That's it! You can now start adding bookmarks.🛠️ How to UseAdd a Bookmark: Click the "Add Bookmark" button, enter a URL (and an optional custom title), and hit "Save."Pin/Unpin a Bookmark: Hover over a bookmark and click the star icon to pin it to the top. Click again to unpin.Share a Bookmark: Hover over a bookmark and click the share icon. This will open your device's native share menu or copy the link to your clipboard.Delete a Bookmark: Hover over a bookmark and click the trash can icon to permanently delete it.Installing as an App (PWA)For the best experience, you can install PinShelf on your device:On Desktop (Chrome): Open PinShelf, and an "Install" icon will appear on the right side of the address bar. Click it to install.On Mobile (iOS/Android): Open the site in your browser, tap the "Share" or "Menu" button, and select "Add to Home Screen".💻 Tech StackHTML5Tailwind CSS (via CDN)Vanilla JavaScript (ES6+)Google Fonts (Inter)📄 LicenseThis project is licensed under the MIT License.
+# 📌 PinShelf - Your Personal Bookmark Manager
+
+A beautiful, modern, and responsive bookmark manager designed to work like a native app.  
+PinShelf allows you to save, organize, and quickly access your favorite websites with a clean, intuitive interface.  
+It's built as a **Progressive Web App (PWA)**, so you can add it to your home screen for an app-like experience.  
+
+---
+
+## ✨ Key Features
+- **Modern & Responsive Design**: A sleek dark-mode interface that looks great on any device, from mobile phones to desktops.  
+- **Pin Important Sites**: Keep your most-used websites at the top of your list for quick and easy access.  
+- **Progressive Web App (PWA)**: Install PinShelf on your mobile or desktop home screen for a seamless, native-app feel. Works offline too!  
+- **Native Sharing**: Use the Web Share API on mobile to share links directly with other apps/contacts (fallback to "copy to clipboard" on desktop).  
+- **Automatic Favicons**: Fetches and displays website favicons for easy visual identification.  
+- **Client-Side Storage**: All bookmarks are securely stored in your browser's localStorage. No accounts, no servers, no fuss.  
+- **Zero Dependencies**: Built with vanilla **HTML, JavaScript, and Tailwind CSS** for lightweight, fast performance.  
+- **Professional Loading Animation**: A smooth loading screen provides a polished experience on startup.  
+
+---
+
+## 🚀 Getting Started
+
+Since PinShelf is a self-contained web application, setup is simple:
+
+1. **Clone or Download** the project files.  
+2. **Place the Favicon**: Ensure `pinshelf.png` is in the same directory as `index.html`.  
+3. **Open in Browser**: Open `index.html` in any modern web browser (Chrome, Firefox, Safari, etc.).  
+
+That’s it — start adding bookmarks instantly! 🎉  
+
+---
+
+## 🛠️ How to Use
+
+- **Add a Bookmark**: Click **"Add Bookmark"**, enter a URL (and optional title), then hit **"Save"**.  
+- **Pin/Unpin**: Hover over a bookmark → click ⭐ to pin/unpin.  
+- **Share**: Hover over a bookmark → click 🔗 to share (native share on mobile, copy to clipboard on desktop).  
+- **Delete**: Hover over a bookmark → click 🗑️ to remove it permanently.  
+
+---
+
+## 📲 Installing as an App (PWA)
+
+For the best experience, install PinShelf on your device:
+
+- **Desktop (Chrome)**: Open PinShelf → click the **Install** icon in the address bar.  
+- **Mobile (iOS/Android)**: Open the site → tap **Share/Menu** → select **Add to Home Screen**.  
+
+---
+
+## 💻 Tech Stack
+
+- **HTML5**  
+- **Tailwind CSS** (via CDN)  
+- **Vanilla JavaScript (ES6+)**  
+- **Google Fonts (Inter)**  
+
+---
+
+## 📄 License
+This project is licensed under the **MIT License**.  
+
+---
