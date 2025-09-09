@@ -6,6 +6,9 @@
     <title>PinShelf - Your Personal Bookmark Manager</title>
     <link rel="icon" href="pinshelf.png" type="image/png">
     
+    <!-- PWA Theme Color -->
+    <meta name="theme-color" content="#0f172a">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -146,7 +149,7 @@
         
         // --- PWA Service Worker and Manifest Setup ---
         const MANIFEST_CONTENT = {
-            "name": "PinShelf Bookmark Manager",
+            "name": "PinShelf",
             "short_name": "PinShelf",
             "start_url": ".",
             "display": "standalone",
@@ -154,8 +157,8 @@
             "theme_color": "#0ea5e9",
             "description": "A beautiful, personal bookmark manager that works like an app.",
             "icons": [
-                { "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTE2LjUgMy43NVYxNi41TDEyIDE0LjI1IDcuNSAxNi41VjMuNzVtOSAwSDcuNUEyLjI1IDIuMjUgMCAwMDUuMjUgNnYxMC41QTIuMjUgMi4yNSAwIDAwNy41IDE4Ljc1aDlBMi4yNSAyLjI1IDAgMDAxOC43NSAxNi41VjZBMi4yNSAyLjI1IDAgMDAxNi41IDMuNzV6IiBzdHJva2U9IiMwZWE1ZTkiIHN0cm9rZS13aWR0aD0iMS41IiAvPjwvc3ZnPg==", "sizes": "192x192", "type": "image/svg+xml" },
-                { "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTE2LjUgMy43NVYxNi41TDEyIDE0LjI1IDcuNSAxNi41VjMuNzVtOSAwSDcuNUEyLjI1IDIuMjUgMCAwMDUuMjUgNnYxMC41QTIuMjUgMi4yNSAwIDAwNy41IDE4Ljc1aDlBMi4yNSAyLjI1IDAgMDAxOC43NSAxNi41VjZBMi4yNSAyLjI1IDAgMDAxNi41IDMuNzV6IiBzdHJva2U9IiMwZWE1ZTkiIHN0cm9rZS13aWR0aD0iMS41IiAvPjwvc3ZnPg==", "sizes": "512x512", "type": "image/svg+xml" }
+                { "src": "pinshelf.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+                { "src": "pinshelf.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
             ]
         };
 
@@ -229,6 +232,16 @@
             }, 3000);
         };
         
+        const closeAllDropdowns = (exceptCard = null) => {
+            const dropdowns = document.querySelectorAll('.dropdown-menu');
+            dropdowns.forEach(dropdown => {
+                const card = dropdown.closest('[data-id]');
+                if (card !== exceptCard) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        };
+
         const openModal = () => {
             modal.classList.remove('hidden');
             setTimeout(() => {
@@ -278,10 +291,10 @@
             const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
             
             const card = document.createElement('div');
-            card.className = 'group relative bg-slate-800 rounded-xl p-4 shadow-lg transition-transform transform hover:-translate-y-1 hover:shadow-sky-500/20';
+            card.className = 'relative bg-slate-800 rounded-xl p-4 shadow-lg transition-transform transform hover:-translate-y-1 hover:shadow-sky-500/20';
             card.dataset.id = bookmark.id;
             
-            const pinClass = bookmark.isPinned ? 'text-yellow-400' : 'text-slate-500';
+            const pinText = bookmark.isPinned ? 'Unpin' : 'Pin';
             
             card.innerHTML = `
                 <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer" class="flex flex-col h-full">
@@ -291,22 +304,35 @@
                     </div>
                     <p class="text-xs text-slate-400 break-all">${bookmark.url}</p>
                 </a>
-                <div class="absolute top-2 right-2 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/50 backdrop-blur-sm rounded-full">
-                    <button class="pin-btn p-2 text-slate-400 hover:text-yellow-400" title="Pin bookmark">
-                        <svg class="w-5 h-5 ${pinClass}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd" />
+                <div class="absolute top-2 right-2">
+                    <button class="menu-btn p-2 rounded-full text-slate-400 hover:bg-slate-700 focus:bg-slate-700 focus:outline-none">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                         </svg>
                     </button>
-                    <button class="share-btn p-2 text-slate-400 hover:text-sky-500" title="Share bookmark">
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                           <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
-                        </svg>
-                    </button>
-                    <button class="delete-btn p-2 text-slate-400 hover:text-red-500" title="Delete bookmark">
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                        </svg>
-                    </button>
+                    <div class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-slate-700 rounded-md shadow-lg z-10 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div class="py-1" role="menu" aria-orientation="vertical">
+                            <button data-action="pin" class="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-slate-200 hover:bg-slate-600" role="menuitem">
+                                <svg class="w-4 h-4 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd" />
+                                </svg>
+                                <span>${pinText}</span>
+                            </button>
+                            <button data-action="share" class="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-slate-200 hover:bg-slate-600" role="menuitem">
+                                <svg class="w-4 h-4 text-sky-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                   <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                                </svg>
+                                <span>Share</span>
+                            </button>
+                            <div class="border-t border-slate-600 my-1"></div>
+                            <button data-action="delete" class="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-slate-600" role="menuitem">
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                </svg>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
             return card;
@@ -346,61 +372,82 @@
         };
         
         const handleGridClick = (e) => {
-            const target = e.target.closest('button');
-            if (!target) return;
-            
-            const card = target.closest('[data-id]');
-            const id = card.dataset.id;
+            const menuBtn = e.target.closest('.menu-btn');
+            const actionBtn = e.target.closest('[data-action]');
+            const card = e.target.closest('[data-id]');
 
-            if (target.classList.contains('delete-btn')) {
-                bookmarks = bookmarks.filter(b => b.id !== id);
-                saveBookmarks();
-                renderBookmarks();
-                showToast('Bookmark removed.', false);
-            }
+            if (!card) return;
 
-            if (target.classList.contains('pin-btn')) {
-                const bookmark = bookmarks.find(b => b.id === id);
-                if (bookmark) {
-                    bookmark.isPinned = !bookmark.isPinned;
-                    saveBookmarks();
-                    renderBookmarks();
+            // If a menu button is clicked, toggle its dropdown
+            if (menuBtn) {
+                const dropdown = card.querySelector('.dropdown-menu');
+                const isHidden = dropdown.classList.contains('hidden');
+                closeAllDropdowns();
+                if (isHidden) {
+                    dropdown.classList.remove('hidden');
                 }
+                return; // Stop further execution
             }
 
-            if (target.classList.contains('share-btn')) {
-                const bookmark = bookmarks.find(b => b.id === id);
-                if (bookmark) {
-                    const shareData = {
-                        title: bookmark.title || 'A bookmarked link',
-                        url: bookmark.url,
-                    };
-                    if (navigator.share) {
-                        navigator.share(shareData)
-                            .then(() => showToast('Bookmark shared successfully!'))
-                            .catch((error) => console.log('Error sharing', error));
-                    } else {
-                        // Fallback for desktop browsers
-                        const textArea = document.createElement('textarea');
-                        textArea.value = bookmark.url;
-                        textArea.style.position = 'fixed'; // Make it invisible
-                        textArea.style.opacity = '0';
-                        document.body.appendChild(textArea);
-                        textArea.focus();
-                        textArea.select();
-                        try {
-                            const successful = document.execCommand('copy');
-                            if(successful) {
-                                showToast('Link copied to clipboard!');
-                            } else {
-                                showToast('Failed to copy link.', true);
-                            }
-                        } catch (err) {
-                            showToast('Failed to copy link.', true);
+            // If an action button inside a dropdown is clicked
+            if (actionBtn) {
+                const id = card.dataset.id;
+                const action = actionBtn.dataset.action;
+
+                switch (action) {
+                    case 'delete':
+                        bookmarks = bookmarks.filter(b => b.id !== id);
+                        saveBookmarks();
+                        renderBookmarks();
+                        showToast('Bookmark removed.', false);
+                        break;
+                    
+                    case 'pin':
+                        const bookmarkToPin = bookmarks.find(b => b.id === id);
+                        if (bookmarkToPin) {
+                            bookmarkToPin.isPinned = !bookmarkToPin.isPinned;
+                            saveBookmarks();
+                            renderBookmarks();
                         }
-                        document.body.removeChild(textArea);
-                    }
+                        break;
+                    
+                    case 'share':
+                        const bookmarkToShare = bookmarks.find(b => b.id === id);
+                        if (bookmarkToShare) {
+                            const shareData = {
+                                title: bookmarkToShare.title || 'A bookmarked link',
+                                url: bookmarkToShare.url,
+                            };
+                            if (navigator.share) {
+                                navigator.share(shareData)
+                                    .then(() => showToast('Bookmark shared successfully!'))
+                                    .catch((error) => console.log('Error sharing', error));
+                            } else {
+                                // Fallback for desktop browsers
+                                const textArea = document.createElement('textarea');
+                                textArea.value = bookmarkToShare.url;
+                                textArea.style.position = 'fixed'; // Make it invisible
+                                textArea.style.opacity = '0';
+                                document.body.appendChild(textArea);
+                                textArea.focus();
+                                textArea.select();
+                                try {
+                                    const successful = document.execCommand('copy');
+                                    if(successful) {
+                                        showToast('Link copied to clipboard!');
+                                    } else {
+                                        showToast('Failed to copy link.', true);
+                                    }
+                                } catch (err) {
+                                    showToast('Failed to copy link.', true);
+                                }
+                                document.body.removeChild(textArea);
+                            }
+                        }
+                        break;
                 }
+                // Close dropdowns after action
+                closeAllDropdowns();
             }
         };
 
@@ -413,6 +460,13 @@
         // Use event delegation for dynamically created bookmarks
         bookmarksGrid.addEventListener('click', handleGridClick);
         pinnedBookmarksGrid.addEventListener('click', handleGridClick);
+
+        // Close dropdowns if clicked outside
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.menu-btn') && !e.target.closest('.dropdown-menu')) {
+                closeAllDropdowns();
+            }
+        });
 
         // --- Initial Render ---
         renderBookmarks();
@@ -432,6 +486,9 @@
 
 </body>
 </html>
+
+
+
 
 
 
