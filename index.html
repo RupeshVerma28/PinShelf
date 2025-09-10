@@ -1,165 +1,300 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PinShelf - Your Personal Bookmark Manager</title>
-    <link rel="icon" href="pinshelf.png" type="image/png">
-    
+    <link rel="icon" href="pinshelf.png" type="image/png" />
+
     <!-- PWA Theme Color -->
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#0f172a" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Custom Styles -->
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        /* Custom scrollbar for a more modern look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1e293b; /* slate-800 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #475569; /* slate-600 */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b; /* slate-500 */
-        }
-        /* Style for the add bookmark modal backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-        }
-        /* Loader Styles */
-        #loader-overlay {
-            transition: opacity 0.3s ease-out;
-        }
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Custom scrollbar for a more modern look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1e293b; /* slate-800 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #475569; /* slate-600 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b; /* slate-500 */
+      }
+      /* Style for the add bookmark modal backdrop */
+      .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+      }
+      /* Loader Styles */
+      #loader-overlay {
+        transition: opacity 0.3s ease-out;
+      }
     </style>
-</head>
-<body class="bg-slate-900 text-slate-200 antialiased selection:bg-sky-500 selection:text-white">
-
+  </head>
+  <body
+    class="bg-slate-900 text-slate-200 antialiased selection:bg-sky-500 selection:text-white"
+  >
     <!-- Loader -->
-    <div id="loader-overlay" class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900">
-        <div class="w-12 h-12 rounded-full border-4 border-t-sky-500 border-slate-700 animate-spin"></div>
+    <div
+      id="loader-overlay"
+      class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900"
+    >
+      <div
+        class="w-12 h-12 rounded-full border-4 border-t-sky-500 border-slate-700 animate-spin"
+      ></div>
     </div>
 
     <div id="app" class="min-h-screen">
-        <!-- Header -->
-        <header class="sticky top-0 z-20 bg-slate-900/80 backdrop-blur-lg border-b border-slate-700/50">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center space-x-3">
-                        <svg class="w-8 h-8 text-sky-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H7.5A2.25 2.25 0 005.25 6v10.5A2.25 2.25 0 007.5 18.75h9A2.25 2.25 0 0018.75 16.5V6A2.25 2.25 0 0016.5 3.75z" />
-                        </svg>
-                        <h1 class="text-2xl font-bold text-slate-100">PinShelf</h1>
-                    </div>
-                    <button id="add-bookmark-btn" class="flex items-center justify-center gap-2 px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-75 transition-transform transform hover:scale-105">
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        <span class="hidden sm:inline">Add Bookmark</span>
-                    </button>
-                </div>
+      <!-- Header -->
+      <header
+        class="sticky top-0 z-20 bg-slate-900/80 backdrop-blur-lg border-b border-slate-700/50"
+      >
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            <div class="flex items-center space-x-3">
+              <svg
+                class="w-8 h-8 text-sky-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H7.5A2.25 2.25 0 005.25 6v10.5A2.25 2.25 0 007.5 18.75h9A2.25 2.25 0 0018.75 16.5V6A2.25 2.25 0 0016.5 3.75z"
+                />
+              </svg>
+              <h1 class="text-2xl font-bold text-slate-100">PinShelf</h1>
             </div>
-        </header>
+            <button
+              id="add-bookmark-btn"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-75 transition-transform transform hover:scale-105"
+            >
+              <svg
+                class="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+              <span class="hidden sm:inline">Add Bookmark</span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-        <!-- Main Content -->
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Pinned Bookmarks Section -->
-            <div id="pinned-bookmarks-section">
-                <h2 class="text-xl font-semibold text-slate-300 mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clip-rule="evenodd" />
-                    </svg>
-                    Pinned
-                </h2>
-                <div id="pinned-bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
-                    <!-- Pinned bookmarks will be injected here -->
-                </div>
-            </div>
-            
-            <!-- All Bookmarks Section -->
-            <div>
-                 <h2 class="text-xl font-semibold text-slate-300 mb-4 border-t border-slate-700 pt-8">All Bookmarks</h2>
-                <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    <!-- Regular bookmarks will be injected here -->
-                </div>
-            </div>
-            
-            <!-- Empty State -->
-            <div id="empty-state" class="hidden text-center py-16">
-                 <svg class="mx-auto h-12 w-12 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                </svg>
-                <h3 class="mt-2 text-lg font-medium text-slate-300">No bookmarks yet</h3>
-                <p class="mt-1 text-sm text-slate-500">Get started by adding a new bookmark.</p>
-            </div>
-        </main>
+      <!-- Main Content -->
+      <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Pinned Bookmarks Section -->
+        <div id="pinned-bookmarks-section">
+          <h2
+            class="text-xl font-semibold text-slate-300 mb-4 flex items-center gap-2"
+          >
+            <svg
+              class="w-6 h-6 text-yellow-400"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Pinned
+          </h2>
+          <div
+            id="pinned-bookmarks-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8"
+          >
+            <!-- Pinned bookmarks will be injected here -->
+          </div>
+        </div>
+
+        <!-- All Bookmarks Section -->
+        <div>
+          <h2
+            class="text-xl font-semibold text-slate-300 mb-4 border-t border-slate-700 pt-8"
+          >
+            All Bookmarks
+          </h2>
+          <div
+            id="bookmarks-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+          >
+            <!-- Regular bookmarks will be injected here -->
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-16">
+          <svg
+            class="mx-auto h-12 w-12 text-slate-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              vector-effect="non-scaling-stroke"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+            />
+          </svg>
+          <h3 class="mt-2 text-lg font-medium text-slate-300">
+            No bookmarks yet
+          </h3>
+          <p class="mt-1 text-sm text-slate-500">
+            Get started by adding a new bookmark.
+          </p>
+        </div>
+      </main>
     </div>
 
     <!-- Add Bookmark Modal -->
-    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div class="fixed inset-0 modal-backdrop transition-opacity" id="modal-backdrop"></div>
-        <div id="modal-content" class="relative bg-slate-800 rounded-xl shadow-2xl w-full max-w-md mx-auto transition-all transform scale-95 opacity-0">
-            <div class="flex items-center justify-between p-5 border-b border-slate-700">
-                <h3 class="text-xl font-semibold text-slate-100">Add a New Bookmark</h3>
-                <button id="close-modal-btn" class="text-slate-400 hover:text-white">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <form id="add-bookmark-form" class="p-6">
-                <div class="mb-4">
-                    <label for="url" class="block text-sm font-medium text-slate-400 mb-2">Website URL</label>
-                    <input type="url" id="url-input" name="url" placeholder="https://example.com" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 transition">
-                </div>
-                <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-slate-400 mb-2">Custom Title (Optional)</label>
-                    <input type="text" id="title-input" name="title" placeholder="My Awesome Site" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 transition">
-                </div>
-                <div class="flex justify-end">
-                    <button type="submit" class="w-full px-5 py-2.5 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-75 transition">Save Bookmark</button>
-                </div>
-            </form>
+    <div
+      id="modal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="fixed inset-0 modal-backdrop transition-opacity"
+        id="modal-backdrop"
+      ></div>
+      <div
+        id="modal-content"
+        class="relative bg-slate-800 rounded-xl shadow-2xl w-full max-w-md mx-auto transition-all transform scale-95 opacity-0"
+      >
+        <div
+          class="flex items-center justify-between p-5 border-b border-slate-700"
+        >
+          <h3 class="text-xl font-semibold text-slate-100">
+            Add a New Bookmark
+          </h3>
+          <button id="close-modal-btn" class="text-slate-400 hover:text-white">
+            <svg
+              class="w-6 h-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
-    </div>
-    
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white py-2 px-5 rounded-lg shadow-lg opacity-0 translate-y-10 transition-all duration-300">
-        <p>Bookmark added successfully!</p>
+        <form id="add-bookmark-form" class="p-6">
+          <div class="mb-4">
+            <label
+              for="url"
+              class="block text-sm font-medium text-slate-400 mb-2"
+              >Website URL</label
+            >
+            <input
+              type="url"
+              id="url-input"
+              name="url"
+              placeholder="https://example.com"
+              required
+              class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
+            />
+          </div>
+          <div class="mb-6">
+            <label
+              for="title"
+              class="block text-sm font-medium text-slate-400 mb-2"
+              >Custom Title (Optional)</label
+            >
+            <input
+              type="text"
+              id="title-input"
+              name="title"
+              placeholder="My Awesome Site"
+              class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
+            />
+          </div>
+          <div class="flex justify-end">
+            <button
+              type="submit"
+              class="w-full px-5 py-2.5 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-75 transition"
+            >
+              Save Bookmark
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div
+      id="toast"
+      class="fixed bottom-5 right-5 bg-green-500 text-white py-2 px-5 rounded-lg shadow-lg opacity-0 translate-y-10 transition-all duration-300"
+    >
+      <p>Bookmark added successfully!</p>
+    </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        
+      document.addEventListener("DOMContentLoaded", () => {
         // --- PWA Service Worker and Manifest Setup ---
         const MANIFEST_CONTENT = {
-            "name": "PinShelf",
-            "short_name": "PinShelf",
-            "start_url": ".",
-            "display": "standalone",
-            "background_color": "#0f172a",
-            "theme_color": "#0ea5e9",
-            "description": "A beautiful, personal bookmark manager that works like an app.",
-            "icons": [
-                { "src": "pinshelf.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-                { "src": "pinshelf.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
-            ]
+          name: "PinShelf",
+          short_name: "PinShelf",
+          start_url: ".",
+          display: "standalone",
+          background_color: "#0f172a",
+          theme_color: "#0ea5e9",
+          description:
+            "A beautiful, personal bookmark manager that works like an app.",
+          icons: [
+            {
+              src: "pinshelf.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "any maskable",
+            },
+            {
+              src: "pinshelf.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any maskable",
+            },
+          ],
         };
 
         const SW_CONTENT = `
@@ -187,122 +322,148 @@
         `;
 
         // Register Manifest
-        const manifestBlob = new Blob([JSON.stringify(MANIFEST_CONTENT)], { type: 'application/json' });
+        const manifestBlob = new Blob([JSON.stringify(MANIFEST_CONTENT)], {
+          type: "application/json",
+        });
         const manifestUrl = URL.createObjectURL(manifestBlob);
-        const manifestLink = document.createElement('link');
-        manifestLink.rel = 'manifest';
+        const manifestLink = document.createElement("link");
+        manifestLink.rel = "manifest";
         manifestLink.href = manifestUrl;
         document.head.appendChild(manifestLink);
 
         // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            const swBlob = new Blob([SW_CONTENT], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swUrl)
-                .then(registration => console.log('ServiceWorker registration successful with scope: ', registration.scope))
-                .catch(error => console.log('ServiceWorker registration failed: ', error));
+        if ("serviceWorker" in navigator) {
+          const swBlob = new Blob([SW_CONTENT], {
+            type: "application/javascript",
+          });
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker
+            .register(swUrl)
+            .then((registration) =>
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              )
+            )
+            .catch((error) =>
+              console.log("ServiceWorker registration failed: ", error)
+            );
         }
-        
+
         // --- DOM Elements ---
-        const addBookmarkBtn = document.getElementById('add-bookmark-btn');
-        const modal = document.getElementById('modal');
-        const modalContent = document.getElementById('modal-content');
-        const modalBackdrop = document.getElementById('modal-backdrop');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        const addBookmarkForm = document.getElementById('add-bookmark-form');
-        const urlInput = document.getElementById('url-input');
-        const titleInput = document.getElementById('title-input');
-        const bookmarksGrid = document.getElementById('bookmarks-grid');
-        const pinnedBookmarksGrid = document.getElementById('pinned-bookmarks-grid');
-        const pinnedSection = document.getElementById('pinned-bookmarks-section');
-        const emptyState = document.getElementById('empty-state');
-        const toast = document.getElementById('toast');
+        const addBookmarkBtn = document.getElementById("add-bookmark-btn");
+        const modal = document.getElementById("modal");
+        const modalContent = document.getElementById("modal-content");
+        const modalBackdrop = document.getElementById("modal-backdrop");
+        const closeModalBtn = document.getElementById("close-modal-btn");
+        const addBookmarkForm = document.getElementById("add-bookmark-form");
+        const urlInput = document.getElementById("url-input");
+        const titleInput = document.getElementById("title-input");
+        const bookmarksGrid = document.getElementById("bookmarks-grid");
+        const pinnedBookmarksGrid = document.getElementById(
+          "pinned-bookmarks-grid"
+        );
+        const pinnedSection = document.getElementById(
+          "pinned-bookmarks-section"
+        );
+        const emptyState = document.getElementById("empty-state");
+        const toast = document.getElementById("toast");
 
         // --- App State ---
-        let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-        
+        let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+
         // --- Functions ---
         const showToast = (message, isError = false) => {
-            toast.textContent = message;
-            toast.classList.toggle('bg-red-500', isError);
-            toast.classList.toggle('bg-green-500', !isError);
-            toast.classList.remove('opacity-0', 'translate-y-10');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-10');
-            }, 3000);
+          toast.textContent = message;
+          toast.classList.toggle("bg-red-500", isError);
+          toast.classList.toggle("bg-green-500", !isError);
+          toast.classList.remove("opacity-0", "translate-y-10");
+          setTimeout(() => {
+            toast.classList.add("opacity-0", "translate-y-10");
+          }, 3000);
         };
-        
+
         const closeAllDropdowns = (exceptCard = null) => {
-            const dropdowns = document.querySelectorAll('.dropdown-menu');
-            dropdowns.forEach(dropdown => {
-                const card = dropdown.closest('[data-id]');
-                if (card !== exceptCard) {
-                    dropdown.classList.add('hidden');
-                }
-            });
+          const allCards = document.querySelectorAll("[data-id]");
+          allCards.forEach((c) => {
+            if (c !== exceptCard) {
+              c.classList.remove("z-30");
+              const d = c.querySelector(".dropdown-menu");
+              if (d) {
+                d.classList.add("hidden");
+              }
+            }
+          });
         };
 
         const openModal = () => {
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modalBackdrop.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95', 'opacity-0');
-            }, 10);
+          modal.classList.remove("hidden");
+          setTimeout(() => {
+            modalBackdrop.classList.remove("opacity-0");
+            modalContent.classList.remove("scale-95", "opacity-0");
+          }, 10);
         };
-        
+
         const closeModal = () => {
-            modalBackdrop.classList.add('opacity-0');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                addBookmarkForm.reset();
-            }, 300);
+          modalBackdrop.classList.add("opacity-0");
+          modalContent.classList.add("scale-95", "opacity-0");
+          setTimeout(() => {
+            modal.classList.add("hidden");
+            addBookmarkForm.reset();
+          }, 300);
         };
 
         const saveBookmarks = () => {
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+          localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
         };
 
         const renderBookmarks = () => {
-            bookmarksGrid.innerHTML = '';
-            pinnedBookmarksGrid.innerHTML = '';
+          bookmarksGrid.innerHTML = "";
+          pinnedBookmarksGrid.innerHTML = "";
 
-            const pinned = bookmarks.filter(b => b.isPinned);
-            const unpinned = bookmarks.filter(b => !b.isPinned);
+          const pinned = bookmarks.filter((b) => b.isPinned);
+          const unpinned = bookmarks.filter((b) => !b.isPinned);
 
-            if (bookmarks.length === 0) {
-                emptyState.classList.remove('hidden');
-                pinnedSection.classList.add('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                pinnedSection.classList.toggle('hidden', pinned.length === 0);
-            }
+          if (bookmarks.length === 0) {
+            emptyState.classList.remove("hidden");
+            pinnedSection.classList.add("hidden");
+          } else {
+            emptyState.classList.add("hidden");
+            pinnedSection.classList.toggle("hidden", pinned.length === 0);
+          }
 
-            pinned.forEach(bookmark => {
-                pinnedBookmarksGrid.appendChild(createBookmarkElement(bookmark));
-            });
-            unpinned.forEach(bookmark => {
-                bookmarksGrid.appendChild(createBookmarkElement(bookmark));
-            });
+          pinned.forEach((bookmark) => {
+            pinnedBookmarksGrid.appendChild(createBookmarkElement(bookmark));
+          });
+          unpinned.forEach((bookmark) => {
+            bookmarksGrid.appendChild(createBookmarkElement(bookmark));
+          });
         };
 
         const createBookmarkElement = (bookmark) => {
-            const domain = new URL(bookmark.url).hostname;
-            const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-            
-            const card = document.createElement('div');
-            card.className = 'relative bg-slate-800 rounded-xl p-4 shadow-lg transition-transform transform hover:-translate-y-1 hover:shadow-sky-500/20';
-            card.dataset.id = bookmark.id;
-            
-            const pinText = bookmark.isPinned ? 'Unpin' : 'Pin';
-            
-            card.innerHTML = `
-                <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer" class="flex flex-col h-full">
+          const domain = new URL(bookmark.url).hostname;
+          const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+
+          const card = document.createElement("div");
+          card.className =
+            "relative bg-slate-800 rounded-xl p-4 shadow-lg transition-transform transform hover:-translate-y-1 hover:shadow-sky-500/20";
+          card.dataset.id = bookmark.id;
+
+          const pinText = bookmark.isPinned ? "Unpin" : "Pin";
+
+          card.innerHTML = `
+                <a href="${
+                  bookmark.url
+                }" target="_blank" rel="noopener noreferrer" class="flex flex-col h-full">
                     <div class="flex-shrink-0 mb-3 flex items-center">
                         <img src="${faviconUrl}" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iI2RiZGNkZCIgY2xhc3M9InctNiBoLTYiPjxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTcgOHYxMGEyIDIgMCAwMDQgMG00LTd2N2EyIDIgMCAwMDQgMG0tOGE1IDUgMCAwMTAtMTAgNSA1IDAgMDEwIDEwTTMgOHYxMGE4IDggMCAwMDggOGg1YTggOCAwIDAwOC04VjhBMjIgMjIgMCAwMDMgOHoiIC8+PC9zdmc+'" alt="Favicon" class="w-8 h-8 rounded-md mr-3 bg-slate-700">
-                        <p class="flex-1 text-sm font-semibold text-slate-100 truncate">${bookmark.title || domain}</p>
+                        <p class="flex-1 text-sm font-semibold text-slate-100 truncate">${
+                          bookmark.title || domain
+                        }</p>
                     </div>
-                    <p class="text-xs text-slate-400 break-all">${bookmark.url}</p>
+                    <p class="text-xs text-slate-400 break-all">${
+                      bookmark.url
+                    }</p>
                 </a>
                 <div class="absolute top-2 right-2">
                     <button class="menu-btn p-2 rounded-full text-slate-400 hover:bg-slate-700 focus:bg-slate-700 focus:outline-none">
@@ -335,160 +496,167 @@
                     </div>
                 </div>
             `;
-            return card;
+          return card;
         };
 
         const handleAddBookmark = (e) => {
-            e.preventDefault();
-            let url = urlInput.value.trim();
-            const title = titleInput.value.trim();
+          e.preventDefault();
+          let url = urlInput.value.trim();
+          const title = titleInput.value.trim();
 
-            if (!url) return;
-            
-            // Add http:// if no protocol is present
-            if (!url.match(/^https?:\/\//i)) {
-                url = 'https://' + url;
-            }
-            
-            try {
-                // Validate URL
-                new URL(url);
-            } catch (_) {
-                showToast('Please enter a valid URL.', true);
-                return;
-            }
+          if (!url) return;
 
-            const newBookmark = {
-                id: Date.now().toString(),
-                url: url,
-                title: title,
-                isPinned: false
-            };
-            bookmarks.unshift(newBookmark);
-            saveBookmarks();
-            renderBookmarks();
-            closeModal();
-            showToast('Bookmark added successfully!');
+          // Add http:// if no protocol is present
+          if (!url.match(/^https?:\/\//i)) {
+            url = "https://" + url;
+          }
+
+          try {
+            // Validate URL
+            new URL(url);
+          } catch (_) {
+            showToast("Please enter a valid URL.", true);
+            return;
+          }
+
+          const newBookmark = {
+            id: Date.now().toString(),
+            url: url,
+            title: title,
+            isPinned: false,
+          };
+          bookmarks.unshift(newBookmark);
+          saveBookmarks();
+          renderBookmarks();
+          closeModal();
+          showToast("Bookmark added successfully!");
         };
-        
+
         const handleGridClick = (e) => {
-            const menuBtn = e.target.closest('.menu-btn');
-            const actionBtn = e.target.closest('[data-action]');
-            const card = e.target.closest('[data-id]');
+          const menuBtn = e.target.closest(".menu-btn");
+          const actionBtn = e.target.closest("[data-action]");
+          const card = e.target.closest("[data-id]");
 
-            if (!card) return;
+          if (!card) return;
 
-            // If a menu button is clicked, toggle its dropdown
-            if (menuBtn) {
-                const dropdown = card.querySelector('.dropdown-menu');
-                const isHidden = dropdown.classList.contains('hidden');
-                closeAllDropdowns();
-                if (isHidden) {
-                    dropdown.classList.remove('hidden');
-                }
-                return; // Stop further execution
+          // If a menu button is clicked, toggle its dropdown
+          if (menuBtn) {
+            const dropdown = card.querySelector(".dropdown-menu");
+            const isHidden = dropdown.classList.contains("hidden");
+
+            // Close all other dropdowns, but keep the current card's z-index for now
+            closeAllDropdowns(card);
+
+            if (isHidden) {
+              card.classList.add("z-30"); // Elevate the card
+              dropdown.classList.remove("hidden");
+            } else {
+              // This case handles toggling the same menu off
+              card.classList.remove("z-30");
+              dropdown.classList.add("hidden");
             }
+            return; // Stop further execution
+          }
 
-            // If an action button inside a dropdown is clicked
-            if (actionBtn) {
-                const id = card.dataset.id;
-                const action = actionBtn.dataset.action;
+          // If an action button inside a dropdown is clicked
+          if (actionBtn) {
+            const id = card.dataset.id;
+            const action = actionBtn.dataset.action;
 
-                switch (action) {
-                    case 'delete':
-                        bookmarks = bookmarks.filter(b => b.id !== id);
-                        saveBookmarks();
-                        renderBookmarks();
-                        showToast('Bookmark removed.', false);
-                        break;
-                    
-                    case 'pin':
-                        const bookmarkToPin = bookmarks.find(b => b.id === id);
-                        if (bookmarkToPin) {
-                            bookmarkToPin.isPinned = !bookmarkToPin.isPinned;
-                            saveBookmarks();
-                            renderBookmarks();
-                        }
-                        break;
-                    
-                    case 'share':
-                        const bookmarkToShare = bookmarks.find(b => b.id === id);
-                        if (bookmarkToShare) {
-                            const shareData = {
-                                title: bookmarkToShare.title || 'A bookmarked link',
-                                url: bookmarkToShare.url,
-                            };
-                            if (navigator.share) {
-                                navigator.share(shareData)
-                                    .then(() => showToast('Bookmark shared successfully!'))
-                                    .catch((error) => console.log('Error sharing', error));
-                            } else {
-                                // Fallback for desktop browsers
-                                const textArea = document.createElement('textarea');
-                                textArea.value = bookmarkToShare.url;
-                                textArea.style.position = 'fixed'; // Make it invisible
-                                textArea.style.opacity = '0';
-                                document.body.appendChild(textArea);
-                                textArea.focus();
-                                textArea.select();
-                                try {
-                                    const successful = document.execCommand('copy');
-                                    if(successful) {
-                                        showToast('Link copied to clipboard!');
-                                    } else {
-                                        showToast('Failed to copy link.', true);
-                                    }
-                                } catch (err) {
-                                    showToast('Failed to copy link.', true);
-                                }
-                                document.body.removeChild(textArea);
-                            }
-                        }
-                        break;
+            switch (action) {
+              case "delete":
+                bookmarks = bookmarks.filter((b) => b.id !== id);
+                saveBookmarks();
+                renderBookmarks();
+                showToast("Bookmark removed.", false);
+                break;
+
+              case "pin":
+                const bookmarkToPin = bookmarks.find((b) => b.id === id);
+                if (bookmarkToPin) {
+                  bookmarkToPin.isPinned = !bookmarkToPin.isPinned;
+                  saveBookmarks();
+                  renderBookmarks();
                 }
-                // Close dropdowns after action
-                closeAllDropdowns();
+                break;
+
+              case "share":
+                const bookmarkToShare = bookmarks.find((b) => b.id === id);
+                if (bookmarkToShare) {
+                  const shareData = {
+                    title: bookmarkToShare.title || "A bookmarked link",
+                    url: bookmarkToShare.url,
+                  };
+                  if (navigator.share) {
+                    navigator
+                      .share(shareData)
+                      .then(() => showToast("Bookmark shared successfully!"))
+                      .catch((error) => console.log("Error sharing", error));
+                  } else {
+                    // Fallback for desktop browsers
+                    const textArea = document.createElement("textarea");
+                    textArea.value = bookmarkToShare.url;
+                    textArea.style.position = "fixed"; // Make it invisible
+                    textArea.style.opacity = "0";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                      const successful = document.execCommand("copy");
+                      if (successful) {
+                        showToast("Link copied to clipboard!");
+                      } else {
+                        showToast("Failed to copy link.", true);
+                      }
+                    } catch (err) {
+                      showToast("Failed to copy link.", true);
+                    }
+                    document.body.removeChild(textArea);
+                  }
+                }
+                break;
             }
+            // Close dropdowns after action
+            closeAllDropdowns();
+          }
         };
 
         // --- Event Listeners ---
-        addBookmarkBtn.addEventListener('click', openModal);
-        closeModalBtn.addEventListener('click', closeModal);
-        modalBackdrop.addEventListener('click', closeModal);
-        addBookmarkForm.addEventListener('submit', handleAddBookmark);
-        
+        addBookmarkBtn.addEventListener("click", openModal);
+        closeModalBtn.addEventListener("click", closeModal);
+        modalBackdrop.addEventListener("click", closeModal);
+        addBookmarkForm.addEventListener("submit", handleAddBookmark);
+
         // Use event delegation for dynamically created bookmarks
-        bookmarksGrid.addEventListener('click', handleGridClick);
-        pinnedBookmarksGrid.addEventListener('click', handleGridClick);
+        bookmarksGrid.addEventListener("click", handleGridClick);
+        pinnedBookmarksGrid.addEventListener("click", handleGridClick);
 
         // Close dropdowns if clicked outside
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('.menu-btn') && !e.target.closest('.dropdown-menu')) {
-                closeAllDropdowns();
-            }
+        window.addEventListener("click", (e) => {
+          if (
+            !e.target.closest(".menu-btn") &&
+            !e.target.closest(".dropdown-menu")
+          ) {
+            closeAllDropdowns();
+          }
         });
 
         // --- Initial Render ---
         renderBookmarks();
 
         // --- Hide Loader ---
-        const loaderOverlay = document.getElementById('loader-overlay');
-        if(loaderOverlay) {
-            // Start the fade out transition
-            loaderOverlay.style.opacity = '0';
+        const loaderOverlay = document.getElementById("loader-overlay");
+        if (loaderOverlay) {
+          // Keep the loader visible longer, then start the fade out transition
+          setTimeout(() => {
+            loaderOverlay.style.opacity = "0";
             // Set display to none after the transition finishes
             setTimeout(() => {
-                loaderOverlay.style.display = 'none';
+              loaderOverlay.style.display = "none";
             }, 300); // Must match the CSS transition duration
+          }, 1500); // Increased visible time (1.5s)
         }
-    });
+      });
     </script>
-
-</body>
+  </body>
 </html>
-
-
-
-
-
-
